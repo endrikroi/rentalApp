@@ -389,7 +389,7 @@ export default function Maintenance() {
                         </span>
                       </td>
                       <td className="px-5 py-3 text-slate-600 whitespace-nowrap">
-                        {format(parseISO(record.date), 'MMM d, yyyy')}
+                        {format(parseISO(record.date), 'd MMM yyyy')}
                       </td>
                       <td className="px-5 py-3 text-right font-mono text-slate-700 whitespace-nowrap">
                         {record.odometer.toLocaleString()} km
@@ -403,7 +403,7 @@ export default function Maintenance() {
                                 <p className="text-xs font-mono">{record.nextServiceOdometer.toLocaleString()} km</p>
                               )}
                               {record.nextServiceDate && (
-                                <p className="text-xs">{format(parseISO(record.nextServiceDate), 'MMM d, yyyy')}</p>
+                                <p className="text-xs">{format(parseISO(record.nextServiceDate), 'd MMM yyyy')}</p>
                               )}
                             </div>
                           </div>

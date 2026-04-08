@@ -7,6 +7,7 @@ import Fleet from './pages/Fleet';
 import TransportPage from './pages/Transport';
 import Customers from './pages/Customers';
 import Maintenance from './pages/Maintenance';
+import Financials from './pages/Financials';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="transport" element={<TransportPage />} />
             <Route path="customers" element={<Customers />} />
             <Route path="maintenance" element={<Maintenance />} />
+            <Route path="financials" element={<Financials />} />
           </Route>
         </Routes>
       </BrowserRouter>

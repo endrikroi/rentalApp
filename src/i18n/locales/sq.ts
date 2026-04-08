@@ -13,6 +13,7 @@ const sq = {
       transport: 'Transporti',
       customers: 'Klientët',
       maintenance: 'Mirëmbajtja',
+      financials: 'Financat',
     },
   },
 
@@ -292,6 +293,55 @@ const sq = {
       transmission: 'Transmisioni',
       'ac-service': 'Shërbimi i Klimës',
       other: 'Tjetër',
+    },
+  },
+
+  // Financials
+  financials: {
+    title: 'Financat',
+    subtitle: 'Të ardhura & shpenzime — {{period}}',
+    exportExcel: 'Eksporto Excel',
+    filter: {
+      allMonths: 'Të gjitha muajt',
+    },
+    summary: {
+      totalIncome: 'Të Ardhura Gjithsej',
+      totalCosts: 'Shpenzime Gjithsej',
+      netProfit: 'Fitimi / Humbja Neto',
+      bookingsCount_one: '{{count}} rezervim',
+      bookingsCount_other: '{{count}} rezervime',
+      servicesCount_one: '{{count}} shërbim',
+      servicesCount_other: '{{count}} shërbime',
+      profit: 'Periudhë fitimprurëse',
+      loss: 'Periudhë me humbje',
+    },
+    income: {
+      title: 'Të Ardhura (Rezervimet)',
+      rows_one: '{{count}} rresht',
+      rows_other: '{{count}} rreshta',
+      noData: 'Nuk ka të dhëna të ardhurash për këtë periudhë',
+    },
+    costs: {
+      title: 'Shpenzime (Mirëmbajtja)',
+      rows_one: '{{count}} rresht',
+      rows_other: '{{count}} rreshta',
+      noData: 'Nuk ka të dhëna shpenzimesh për këtë periudhë',
+    },
+    table: {
+      date: 'Data',
+      customer: 'Klienti',
+      car: 'Makina',
+      period: 'Periudha e Qirasë',
+      status: 'Statusi',
+      dailyRate: 'Çmimi Ditor',
+      amount: 'Shuma',
+      serviceType: 'Lloji i Shërbimit',
+      provider: 'Ofruesi',
+    },
+    export: {
+      incomeSheet: 'Të Ardhura',
+      costsSheet: 'Shpenzime',
+      summarySheet: 'Përmbledhje',
     },
   },
 } as const;

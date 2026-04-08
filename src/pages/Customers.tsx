@@ -227,7 +227,7 @@ export default function Customers() {
                       {t('customers.currentlyRenting')}: {getCarLabel(activeBooking.carId)}
                     </p>
                     <p className="text-xs text-green-600">
-                      {t('customers.until')} {format(parseISO(activeBooking.endDate), 'MMM d, yyyy')}
+                      {t('customers.until')} {format(parseISO(activeBooking.endDate), 'd MMM yyyy')}
                     </p>
                   </div>
                 )}
@@ -282,7 +282,7 @@ export default function Customers() {
                 <div>
                   <p className="text-sm font-medium text-slate-800">{getCarLabel(b.carId)}</p>
                   <p className="text-xs text-slate-500">
-                    {format(parseISO(b.startDate), 'MMM d')} &ndash; {format(parseISO(b.endDate), 'MMM d, yyyy')}
+                    {format(parseISO(b.startDate), 'd MMM')} &ndash; {format(parseISO(b.endDate), 'd MMM yyyy')}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">

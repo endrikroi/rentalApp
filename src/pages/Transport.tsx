@@ -267,7 +267,7 @@ export default function TransportPage() {
               <div key={dateKey}>
                 <div className="flex items-center gap-3 mb-3">
                   <h2 className={`text-sm font-semibold ${isT ? 'text-blue-700' : 'text-slate-500'}`}>
-                    {isT ? `${t('common.today')} – ` : ''}{format(date, 'EEEE, MMMM d, yyyy')}
+                    {isT ? `${t('common.today')} – ` : ''}{format(date, 'EEEE, d MMMM yyyy')}
                   </h2>
                   <div className={`h-px flex-1 ${isT ? 'bg-blue-200' : 'bg-slate-200'}`} />
                   <span className={`text-xs px-2 py-0.5 rounded-full ${isT ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>

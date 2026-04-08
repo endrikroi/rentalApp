@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Car, CalendarDays, Truck, Users, LayoutDashboard, Wrench } from 'lucide-react';
+import { Car, CalendarDays, Truck, Users, LayoutDashboard, Wrench, BarChart2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const navRoutes = [
@@ -9,6 +9,7 @@ const navRoutes = [
   { to: '/transport', key: 'transport', icon: Truck },
   { to: '/customers', key: 'customers', icon: Users },
   { to: '/maintenance', key: 'maintenance', icon: Wrench },
+  { to: '/financials', key: 'financials', icon: BarChart2 },
 ] as const;
 
 export default function Sidebar() {

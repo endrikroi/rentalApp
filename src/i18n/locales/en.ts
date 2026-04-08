@@ -13,6 +13,7 @@ const en = {
       transport: 'Transport',
       customers: 'Customers',
       maintenance: 'Maintenance',
+      financials: 'Financials',
     },
   },
 
@@ -292,6 +293,55 @@ const en = {
       transmission: 'Transmission',
       'ac-service': 'A/C Service',
       other: 'Other',
+    },
+  },
+
+  // Financials
+  financials: {
+    title: 'Financials',
+    subtitle: 'Income & expenses — {{period}}',
+    exportExcel: 'Export Excel',
+    filter: {
+      allMonths: 'All months',
+    },
+    summary: {
+      totalIncome: 'Total Income',
+      totalCosts: 'Total Costs',
+      netProfit: 'Net Profit / Loss',
+      bookingsCount_one: '{{count}} booking',
+      bookingsCount_other: '{{count}} bookings',
+      servicesCount_one: '{{count}} service',
+      servicesCount_other: '{{count}} services',
+      profit: 'Profitable period',
+      loss: 'Loss period',
+    },
+    income: {
+      title: 'Income (Bookings)',
+      rows_one: '{{count}} row',
+      rows_other: '{{count}} rows',
+      noData: 'No income records for this period',
+    },
+    costs: {
+      title: 'Costs (Maintenance)',
+      rows_one: '{{count}} row',
+      rows_other: '{{count}} rows',
+      noData: 'No cost records for this period',
+    },
+    table: {
+      date: 'Date',
+      customer: 'Customer',
+      car: 'Car',
+      period: 'Rental Period',
+      status: 'Status',
+      dailyRate: 'Daily Rate',
+      amount: 'Amount',
+      serviceType: 'Service Type',
+      provider: 'Provider',
+    },
+    export: {
+      incomeSheet: 'Income',
+      costsSheet: 'Costs',
+      summarySheet: 'Summary',
     },
   },
 } as const;

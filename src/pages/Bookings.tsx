@@ -330,7 +330,7 @@ export default function Bookings() {
                     <td className="px-5 py-3 font-medium text-slate-800">{getCustomerName(b.customerId)}</td>
                     <td className="px-5 py-3 text-slate-600">{getCarLabel(b.carId)}</td>
                     <td className="px-5 py-3 text-slate-500 whitespace-nowrap">
-                      {format(parseISO(b.startDate), 'MMM d')} &ndash; {format(parseISO(b.endDate), 'MMM d, yy')}
+                      {format(parseISO(b.startDate), 'd MMM')} &ndash; {format(parseISO(b.endDate), 'd MMM yy')}
                     </td>
                     <td className="px-5 py-3">
                       <span className="text-xs text-slate-600 bg-slate-100 rounded px-1.5 py-0.5">{LOCATION_LABELS[b.pickupLocationType]}</span>

@@ -78,7 +78,7 @@ export default function Dashboard() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-800">{t('dashboard.title')}</h1>
-        <p className="text-slate-500 text-sm mt-1">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+        <p className="text-slate-500 text-sm mt-1">{format(new Date(), 'EEEE, d MMMM yyyy')}</p>
       </div>
 
       {/* KPI cards */}
@@ -158,7 +158,7 @@ export default function Dashboard() {
                       <p className="text-xs text-slate-500 truncate">{transport.address}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-xs font-medium text-slate-700">{format(parseISO(transport.scheduledDateTime), 'MMM d')}</p>
+                      <p className="text-xs font-medium text-slate-700">{format(parseISO(transport.scheduledDateTime), 'd MMM')}</p>
                       <p className="text-xs text-slate-400">{format(parseISO(transport.scheduledDateTime), 'HH:mm')}</p>
                     </div>
                   </li>
@@ -190,7 +190,7 @@ export default function Dashboard() {
                   <tr key={b.id} className="hover:bg-slate-50">
                     <td className="px-5 py-3 font-medium text-slate-800">{getCustomerName(b.customerId)}</td>
                     <td className="px-5 py-3 text-slate-600">{getCarLabel(b.carId)}</td>
-                    <td className="px-5 py-3 text-slate-500">{format(parseISO(b.startDate), 'MMM d')} &ndash; {format(parseISO(b.endDate), 'MMM d, yyyy')}</td>
+                    <td className="px-5 py-3 text-slate-500">{format(parseISO(b.startDate), 'd MMM')} &ndash; {format(parseISO(b.endDate), 'd MMM yyyy')}</td>
                     <td className="px-5 py-3">
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${BOOKING_STATUS_COLORS[b.status]}`}>
                         {b.status}
