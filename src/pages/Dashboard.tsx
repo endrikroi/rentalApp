@@ -3,6 +3,7 @@ import { Car, CalendarDays, Users, Truck, TrendingUp } from 'lucide-react';
 import { format, isToday, parseISO, isAfter, startOfDay } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { BOOKING_STATUS_COLORS, CAR_STATUS_COLORS } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 interface StatCardProps {
   label: string;
@@ -31,6 +32,7 @@ function StatCard({ label, value, icon: Icon, color, sub }: StatCardProps) {
 
 export default function Dashboard() {
   const { cars, customers, bookings, transports } = useAppContext();
+  const { t } = useTranslation();
 
   const today = startOfDay(new Date());
 
@@ -75,16 +77,16 @@ export default function Dashboard() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-slate-800">{t('dashboard.title')}</h1>
         <p className="text-slate-500 text-sm mt-1">{format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
       </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Available Cars" value={availableCars} icon={Car} color="bg-green-500" sub={`${rentedCars} rented, ${maintenanceCars} in maintenance`} />
-        <StatCard label="Active Rentals" value={activeBookings} icon={CalendarDays} color="bg-blue-500" sub={`${confirmedBookings} confirmed`} />
-        <StatCard label="Today's Transport" value={todayTransports.length} icon={Truck} color="bg-orange-500" sub={`${carsLeavingToday.length} deliveries, ${carsReturningToday.length} returns`} />
-        <StatCard label="Total Customers" value={customers.length} icon={Users} color="bg-purple-500" />
+        <StatCard label={t('dashboard.stats.availableCars')} value={availableCars} icon={Car} color="bg-green-500" sub={t('dashboard.stats.availableCarsSubtitle', { rented: rentedCars, maintenance: maintenanceCars })} />
+        <StatCard label={t('dashboard.stats.activeRentals')} value={activeBookings} icon={CalendarDays} color="bg-blue-500" sub={t('dashboard.stats.activeRentalsSubtitle', { confirmed: confirmedBookings })} />
+        <StatCard label={t('dashboard.stats.todayTransport')} value={todayTransports.length} icon={Truck} color="bg-orange-500" sub={t('dashboard.stats.todayTransportSubtitle', { deliveries: carsLeavingToday.length, returns: carsReturningToday.length })} />
+        <StatCard label={t('dashboard.stats.totalCustomers')} value={customers.length} icon={Users} color="bg-purple-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -93,36 +95,36 @@ export default function Dashboard() {
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <h2 className="font-semibold text-slate-800 flex items-center gap-2">
               <Truck className="w-4 h-4 text-orange-500" />
-              Today's Transport Tasks
+              {t('dashboard.todaysTasks')}
             </h2>
-            <Link to="/transport" className="text-xs text-blue-600 hover:underline">View all</Link>
+            <Link to="/transport" className="text-xs text-blue-600 hover:underline">{t('common.viewAll')}</Link>
           </div>
           {todayTransports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-slate-400">
               <TrendingUp className="w-8 h-8 mb-2" />
-              <p className="text-sm">No transport tasks today</p>
+              <p className="text-sm">{t('dashboard.noTodayTasks')}</p>
             </div>
           ) : (
             <ul className="divide-y divide-slate-100">
-              {todayTransports.map(t => {
-                const booking = getBookingForTransport(t.bookingId);
+              {todayTransports.map(transport => {
+                const booking = getBookingForTransport(transport.bookingId);
                 const carLabel = booking ? getCarLabel(booking.carId) : '—';
                 const customerName = booking ? getCustomerName(booking.customerId) : '—';
                 return (
-                  <li key={t.id} className="px-5 py-3">
+                  <li key={transport.id} className="px-5 py-3">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-slate-800 truncate">{carLabel}</p>
-                        <p className="text-xs text-slate-500">{customerName} &mdash; {t.address}</p>
+                        <p className="text-xs text-slate-500">{customerName} &mdash; {transport.address}</p>
                       </div>
                       <div className="flex flex-col items-end gap-1 shrink-0">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${t.type === 'delivery' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}`}>
-                          {t.type === 'delivery' ? 'Delivery' : 'Return Pickup'}
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${transport.type === 'delivery' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'}`}>
+                          {transport.type === 'delivery' ? t('dashboard.delivery') : t('dashboard.returnPickup')}
                         </span>
-                        <span className="text-xs text-slate-400">{format(parseISO(t.scheduledDateTime), 'HH:mm')}</span>
+                        <span className="text-xs text-slate-400">{format(parseISO(transport.scheduledDateTime), 'HH:mm')}</span>
                       </div>
                     </div>
-                    {t.driverName && <p className="text-xs text-slate-400 mt-1">Driver: {t.driverName}</p>}
+                    {transport.driverName && <p className="text-xs text-slate-400 mt-1">{t('common.driver')}: {transport.driverName}</p>}
                   </li>
                 );
               })}
@@ -135,29 +137,29 @@ export default function Dashboard() {
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <h2 className="font-semibold text-slate-800 flex items-center gap-2">
               <CalendarDays className="w-4 h-4 text-blue-500" />
-              Upcoming Transport
+              {t('dashboard.upcomingTransport')}
             </h2>
-            <Link to="/transport" className="text-xs text-blue-600 hover:underline">View all</Link>
+            <Link to="/transport" className="text-xs text-blue-600 hover:underline">{t('common.viewAll')}</Link>
           </div>
           {upcomingTransports.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-slate-400">
               <CalendarDays className="w-8 h-8 mb-2" />
-              <p className="text-sm">No upcoming transports</p>
+              <p className="text-sm">{t('dashboard.noUpcomingTransport')}</p>
             </div>
           ) : (
             <ul className="divide-y divide-slate-100">
-              {upcomingTransports.map(t => {
-                const booking = getBookingForTransport(t.bookingId);
+              {upcomingTransports.map(transport => {
+                const booking = getBookingForTransport(transport.bookingId);
                 const carLabel = booking ? getCarLabel(booking.carId) : '—';
                 return (
-                  <li key={t.id} className="px-5 py-3 flex items-center justify-between gap-2">
+                  <li key={transport.id} className="px-5 py-3 flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 truncate">{carLabel}</p>
-                      <p className="text-xs text-slate-500 truncate">{t.address}</p>
+                      <p className="text-xs text-slate-500 truncate">{transport.address}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-xs font-medium text-slate-700">{format(parseISO(t.scheduledDateTime), 'MMM d')}</p>
-                      <p className="text-xs text-slate-400">{format(parseISO(t.scheduledDateTime), 'HH:mm')}</p>
+                      <p className="text-xs font-medium text-slate-700">{format(parseISO(transport.scheduledDateTime), 'MMM d')}</p>
+                      <p className="text-xs text-slate-400">{format(parseISO(transport.scheduledDateTime), 'HH:mm')}</p>
                     </div>
                   </li>
                 );
@@ -169,18 +171,18 @@ export default function Dashboard() {
         {/* Recent bookings */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 lg:col-span-2">
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-800">Recent Bookings</h2>
-            <Link to="/bookings" className="text-xs text-blue-600 hover:underline">View all</Link>
+            <h2 className="font-semibold text-slate-800">{t('dashboard.recentBookings')}</h2>
+            <Link to="/bookings" className="text-xs text-blue-600 hover:underline">{t('common.viewAll')}</Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-xs text-slate-500 bg-slate-50">
-                  <th className="text-left px-5 py-3 font-medium">Customer</th>
-                  <th className="text-left px-5 py-3 font-medium">Car</th>
-                  <th className="text-left px-5 py-3 font-medium">Period</th>
-                  <th className="text-left px-5 py-3 font-medium">Status</th>
-                  <th className="text-right px-5 py-3 font-medium">Total</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.customer')}</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.car')}</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.period')}</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.status')}</th>
+                  <th className="text-right px-5 py-3 font-medium">{t('dashboard.total')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -207,19 +209,19 @@ export default function Dashboard() {
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <h2 className="font-semibold text-slate-800 flex items-center gap-2">
               <Car className="w-4 h-4 text-slate-600" />
-              Fleet Overview
+              {t('dashboard.fleetOverview')}
             </h2>
-            <Link to="/fleet" className="text-xs text-blue-600 hover:underline">Manage fleet</Link>
+            <Link to="/fleet" className="text-xs text-blue-600 hover:underline">{t('dashboard.manageFleet')}</Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-xs text-slate-500 bg-slate-50">
-                  <th className="text-left px-5 py-3 font-medium">Vehicle</th>
-                  <th className="text-left px-5 py-3 font-medium">Plate</th>
-                  <th className="text-left px-5 py-3 font-medium">Category</th>
-                  <th className="text-left px-5 py-3 font-medium">Status</th>
-                  <th className="text-right px-5 py-3 font-medium">Daily Rate</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.vehicle')}</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.plate')}</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.category')}</th>
+                  <th className="text-left px-5 py-3 font-medium">{t('dashboard.status')}</th>
+                  <th className="text-right px-5 py-3 font-medium">{t('dashboard.dailyRate')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">

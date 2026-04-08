@@ -4,6 +4,7 @@ import Modal from '../components/Modal';
 import type { Car, CarStatus, CarCategory } from '../types';
 import { Plus, Pencil, Trash2, Search, Car as CarIcon, Wrench, CheckCircle } from 'lucide-react';
 import { CAR_STATUS_COLORS as STATUS_COLORS, CAR_CATEGORIES as CATEGORIES } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 const STATUS_ICONS: Record<CarStatus, React.ComponentType<{ className?: string }>> = {
   available: CheckCircle,
@@ -34,6 +35,7 @@ interface CarFormProps {
 }
 
 function CarForm({ initial, onSave, onCancel }: CarFormProps) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(initial);
   const set = (field: keyof typeof form, value: string | number) =>
     setForm(prev => ({ ...prev, [field]: value }));
@@ -47,7 +49,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Make *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.make')} *</label>
           <input
             required
             type="text"
@@ -58,7 +60,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Model *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.model')} *</label>
           <input
             required
             type="text"
@@ -69,7 +71,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Year *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.year')} *</label>
           <input
             required
             type="number"
@@ -81,7 +83,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">License Plate *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.plate')} *</label>
           <input
             required
             type="text"
@@ -92,7 +94,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Color</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.color')}</label>
           <input
             type="text"
             value={form.color}
@@ -102,7 +104,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.category')}</label>
           <select
             value={form.category}
             onChange={e => set('category', e.target.value as CarCategory)}
@@ -114,19 +116,19 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.status')}</label>
           <select
             value={form.status}
             onChange={e => set('status', e.target.value as CarStatus)}
             className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="available">Available</option>
-            <option value="rented">Rented</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="available">{t('fleet.status.available')}</option>
+            <option value="rented">{t('fleet.status.rented')}</option>
+            <option value="maintenance">{t('fleet.status.maintenance')}</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Daily Rate ($)</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.dailyRate')}</label>
           <input
             required
             type="number"
@@ -138,7 +140,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">{t('fleet.form.notes')}</label>
         <textarea
           rows={2}
           value={form.notes}
@@ -148,8 +150,8 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
         />
       </div>
       <div className="flex justify-end gap-3 pt-2">
-        <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">Cancel</button>
-        <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">Save Car</button>
+        <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">{t('common.cancel')}</button>
+        <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">{t('fleet.saveVehicle')}</button>
       </div>
     </form>
   );
@@ -157,6 +159,7 @@ function CarForm({ initial, onSave, onCancel }: CarFormProps) {
 
 export default function Fleet() {
   const { cars, bookings, addCar, updateCar, deleteCar } = useAppContext();
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<CarStatus | 'all'>('all');
   const [modal, setModal] = useState<{ mode: 'add' | 'edit'; car?: Car } | null>(null);
@@ -191,15 +194,15 @@ export default function Fleet() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Fleet</h1>
-          <p className="text-slate-500 text-sm mt-1">{cars.length} vehicles total</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t('fleet.title')}</h1>
+          <p className="text-slate-500 text-sm mt-1">{t('fleet.subtitle_other', { count: cars.length })}</p>
         </div>
         <button
           onClick={() => setModal({ mode: 'add' })}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Add Vehicle
+          {t('fleet.addVehicle')}
         </button>
       </div>
 
@@ -237,7 +240,7 @@ export default function Fleet() {
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search by make, model, plate, color..."
+            placeholder={t('fleet.searchPlaceholder')}
           className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
         />
       </div>
@@ -248,20 +251,20 @@ export default function Fleet() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-slate-500 bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-5 py-3 font-medium">Vehicle</th>
-                <th className="text-left px-5 py-3 font-medium">Plate</th>
-                <th className="text-left px-5 py-3 font-medium">Category</th>
-                <th className="text-left px-5 py-3 font-medium">Color</th>
-                <th className="text-left px-5 py-3 font-medium">Status</th>
-                <th className="text-left px-5 py-3 font-medium">Current Booking</th>
-                <th className="text-right px-5 py-3 font-medium">Rate/day</th>
+                <th className="text-left px-5 py-3 font-medium">{t('fleet.vehicle')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('fleet.plate')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('fleet.category')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('fleet.color')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('fleet.statusHeader')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('fleet.currentBooking')}</th>
+                <th className="text-right px-5 py-3 font-medium">{t('fleet.ratePerDay')}</th>
                 <th className="px-5 py-3"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-slate-400">No vehicles found</td>
+                  <td colSpan={8} className="text-center py-12 text-slate-400">{t('fleet.noVehicles')}</td>
                 </tr>
               ) : (
                 filtered.map(car => {
@@ -313,7 +316,7 @@ export default function Fleet() {
 
       {modal && (
         <Modal
-          title={modal.mode === 'add' ? 'Add Vehicle' : 'Edit Vehicle'}
+          title={modal.mode === 'add' ? t('fleet.addTitle') : t('fleet.editTitle')}
           onClose={() => setModal(null)}
           size="md"
         >
@@ -330,11 +333,11 @@ export default function Fleet() {
       )}
 
       {confirmDelete && (
-        <Modal title="Remove Vehicle" onClose={() => setConfirmDelete(null)} size="sm">
-          <p className="text-sm text-slate-600 mb-4">Are you sure you want to remove this vehicle from the fleet?</p>
+        <Modal title={t('fleet.deleteTitle')} onClose={() => setConfirmDelete(null)} size="sm">
+          <p className="text-sm text-slate-600 mb-4">{t('fleet.deleteConfirm')}</p>
           <div className="flex justify-end gap-3">
-            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">Cancel</button>
-            <button onClick={() => { deleteCar(confirmDelete); setConfirmDelete(null); }} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">Remove</button>
+            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">{t('common.cancel')}</button>
+            <button onClick={() => { deleteCar(confirmDelete); setConfirmDelete(null); }} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">{t('common.remove')}</button>
           </div>
         </Modal>
       )}

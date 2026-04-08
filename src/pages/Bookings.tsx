@@ -5,6 +5,7 @@ import type { Booking, BookingStatus, LocationType } from '../types';
 import { Plus, Pencil, Trash2, Search, Filter } from 'lucide-react';
 import { format, parseISO, differenceInDays } from 'date-fns';
 import { BOOKING_STATUS_COLORS as STATUS_COLORS, LOCATION_LABELS } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 const EMPTY_FORM: Omit<Booking, 'id' | 'createdAt' | 'totalPrice'> = {
   customerId: '',
@@ -38,6 +39,7 @@ interface BookingFormProps {
 
 function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
   const { cars, customers } = useAppContext();
+  const { t } = useTranslation();
   const [form, setForm] = useState(initial);
 
   const set = (field: keyof typeof form, value: string) =>
@@ -62,35 +64,35 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Customer *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.customer')} *</label>
           <select
             required
             value={form.customerId}
             onChange={e => set('customerId', e.target.value)}
             className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select customer...</option>
+            <option value="">{t('bookings.form.selectCustomer')}</option>
             {customers.map(c => (
               <option key={c.id} value={c.id}>{c.firstName} {c.lastName}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Car *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.car')} *</label>
           <select
             required
             value={form.carId}
             onChange={e => set('carId', e.target.value)}
             className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select car...</option>
+            <option value="">{t('bookings.form.selectCar')}</option>
             {availableCars.map(c => (
               <option key={c.id} value={c.id}>{c.make} {c.model} – {c.plate} (${c.dailyRate}/day)</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Start Date *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.startDate')} *</label>
           <input
             required
             type="date"
@@ -100,7 +102,7 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">End Date *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.endDate')} *</label>
           <input
             required
             type="date"
@@ -114,7 +116,7 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Pickup Location Type</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.pickupLocationType')}</label>
           <select
             value={form.pickupLocationType}
             onChange={e => set('pickupLocationType', e.target.value as LocationType)}
@@ -126,7 +128,7 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Pickup Location Detail</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.pickupLocationDetail')}</label>
           <input
             type="text"
             value={form.pickupLocationDetail}
@@ -136,7 +138,7 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Return Location Type</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.returnLocationType')}</label>
           <select
             value={form.returnLocationType}
             onChange={e => set('returnLocationType', e.target.value as LocationType)}
@@ -148,7 +150,7 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Return Location Detail</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.returnLocationDetail')}</label>
           <input
             type="text"
             value={form.returnLocationDetail}
@@ -161,20 +163,20 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.status')}</label>
           <select
             value={form.status}
             onChange={e => set('status', e.target.value as BookingStatus)}
             className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="confirmed">Confirmed</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
+            <option value="confirmed">{t('bookings.status.confirmed')}</option>
+            <option value="active">{t('bookings.status.active')}</option>
+            <option value="completed">{t('bookings.status.completed')}</option>
+            <option value="cancelled">{t('bookings.status.cancelled')}</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Daily Rate ($)</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.dailyRate')}</label>
           <input
             type="number"
             min="0"
@@ -187,12 +189,12 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
 
       {total > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 text-sm text-blue-800">
-          Estimated total: <strong>${total.toLocaleString()}</strong> ({differenceInDays(parseISO(form.endDate), parseISO(form.startDate))} days × ${form.dailyRate})
+          {t('bookings.form.estimatedTotal')}: <strong>${total.toLocaleString()}</strong> ({differenceInDays(parseISO(form.endDate), parseISO(form.startDate))} {t('bookings.form.days')} × ${form.dailyRate})
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">{t('bookings.form.notes')}</label>
         <textarea
           rows={2}
           value={form.notes}
@@ -204,10 +206,10 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
 
       <div className="flex justify-end gap-3 pt-2">
         <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">
-          Cancel
+          {t('common.cancel')}
         </button>
         <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-          Save Booking
+          {t('bookings.saveBooking')}
         </button>
       </div>
     </form>
@@ -216,6 +218,7 @@ function BookingForm({ initial, onSave, onCancel }: BookingFormProps) {
 
 export default function Bookings() {
   const { bookings, cars, customers, addBooking, updateBooking, deleteBooking } = useAppContext();
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<BookingStatus | 'all'>('all');
   const [modal, setModal] = useState<{ mode: 'add' | 'edit'; booking?: Booking } | null>(null);
@@ -258,15 +261,15 @@ export default function Bookings() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Bookings</h1>
-          <p className="text-slate-500 text-sm mt-1">{bookings.length} total bookings</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t('bookings.title')}</h1>
+          <p className="text-slate-500 text-sm mt-1">{t('bookings.subtitle_other', { count: bookings.length })}</p>
         </div>
         <button
           onClick={() => setModal({ mode: 'add' })}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          New Booking
+          {t('bookings.newBooking')}
         </button>
       </div>
 
@@ -278,7 +281,7 @@ export default function Bookings() {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search customer or car..."
+            placeholder={t('bookings.searchPlaceholder')}
             className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
         </div>
@@ -294,7 +297,7 @@ export default function Bookings() {
                   : 'bg-white text-slate-600 border-slate-300 hover:border-blue-400'
               }`}
             >
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {s === 'all' ? t('bookings.status.all') : t(`bookings.status.${s}`)}
             </button>
           ))}
         </div>
@@ -306,20 +309,20 @@ export default function Bookings() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-slate-500 bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-5 py-3 font-medium">Customer</th>
-                <th className="text-left px-5 py-3 font-medium">Car</th>
-                <th className="text-left px-5 py-3 font-medium">Period</th>
-                <th className="text-left px-5 py-3 font-medium">Pickup</th>
-                <th className="text-left px-5 py-3 font-medium">Return</th>
-                <th className="text-left px-5 py-3 font-medium">Status</th>
-                <th className="text-right px-5 py-3 font-medium">Total</th>
+                <th className="text-left px-5 py-3 font-medium">{t('bookings.customer')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('bookings.car')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('bookings.period')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('bookings.pickup')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('bookings.return')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('bookings.statusHeader')}</th>
+                <th className="text-right px-5 py-3 font-medium">{t('bookings.total')}</th>
                 <th className="px-5 py-3"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-slate-400">No bookings found</td>
+                  <td colSpan={8} className="text-center py-12 text-slate-400">{t('bookings.noBookings')}</td>
                 </tr>
               ) : (
                 filtered.map(b => (
@@ -369,7 +372,7 @@ export default function Bookings() {
 
       {modal && (
         <Modal
-          title={modal.mode === 'add' ? 'New Booking' : 'Edit Booking'}
+          title={modal.mode === 'add' ? t('bookings.addTitle') : t('bookings.editTitle')}
           onClose={() => setModal(null)}
           size="lg"
         >
@@ -394,11 +397,11 @@ export default function Bookings() {
       )}
 
       {confirmDelete && (
-        <Modal title="Delete Booking" onClose={() => setConfirmDelete(null)} size="sm">
-          <p className="text-sm text-slate-600 mb-4">Are you sure you want to delete this booking? This action cannot be undone.</p>
+        <Modal title={t('bookings.deleteTitle')} onClose={() => setConfirmDelete(null)} size="sm">
+          <p className="text-sm text-slate-600 mb-4">{t('bookings.deleteConfirm')}</p>
           <div className="flex justify-end gap-3">
-            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">Cancel</button>
-            <button onClick={() => handleDelete(confirmDelete)} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">Delete</button>
+            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">{t('common.cancel')}</button>
+            <button onClick={() => handleDelete(confirmDelete)} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">{t('common.delete')}</button>
           </div>
         </Modal>
       )}

@@ -5,6 +5,7 @@ import type { Customer } from '../types';
 import { BOOKING_STATUS_COLORS as STATUS_COLORS } from '../constants';
 import { Plus, Pencil, Trash2, Search, User, Phone, Mail, CreditCard } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 function generateId() {
   return 'cu' + Date.now().toString(36);
@@ -26,6 +27,7 @@ interface CustomerFormProps {
 }
 
 function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(initial);
   const set = (field: keyof typeof form, value: string) =>
     setForm(prev => ({ ...prev, [field]: value }));
@@ -39,7 +41,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">First Name *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('customers.form.firstName')} *</label>
           <input
             required
             type="text"
@@ -49,7 +51,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Last Name *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('customers.form.lastName')} *</label>
           <input
             required
             type="text"
@@ -59,7 +61,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Email *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('customers.form.email')} *</label>
           <input
             required
             type="email"
@@ -69,7 +71,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Phone *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('customers.form.phone')} *</label>
           <input
             required
             type="tel"
@@ -80,7 +82,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
           />
         </div>
         <div className="col-span-2">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Driver License Number *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('customers.form.driverLicense')} *</label>
           <input
             required
             type="text"
@@ -92,7 +94,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">{t('customers.form.notes')}</label>
         <textarea
           rows={2}
           value={form.notes}
@@ -102,8 +104,8 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
         />
       </div>
       <div className="flex justify-end gap-3 pt-2">
-        <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">Cancel</button>
-        <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">Save Customer</button>
+        <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">{t('common.cancel')}</button>
+        <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">{t('customers.saveCustomer')}</button>
       </div>
     </form>
   );
@@ -111,6 +113,7 @@ function CustomerForm({ initial, onSave, onCancel }: CustomerFormProps) {
 
 export default function Customers() {
   const { customers, bookings, cars, addCustomer, updateCustomer, deleteCustomer } = useAppContext();
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [modal, setModal] = useState<{ mode: 'add' | 'edit'; customer?: Customer } | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -142,15 +145,15 @@ export default function Customers() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Customers</h1>
-          <p className="text-slate-500 text-sm mt-1">{customers.length} registered customers</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t('customers.title')}</h1>
+          <p className="text-slate-500 text-sm mt-1">{t('customers.subtitle_other', { count: customers.length })}</p>
         </div>
         <button
           onClick={() => setModal({ mode: 'add' })}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Add Customer
+          {t('customers.addCustomer')}
         </button>
       </div>
 
@@ -160,7 +163,7 @@ export default function Customers() {
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search by name, email, or phone..."
+            placeholder={t('customers.searchPlaceholder')}
           className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
         />
       </div>
@@ -169,7 +172,7 @@ export default function Customers() {
         {filtered.length === 0 ? (
           <div className="col-span-full bg-white rounded-xl border border-slate-200 flex flex-col items-center justify-center py-16 text-slate-400">
             <User className="w-10 h-10 mb-3" />
-            <p>No customers found</p>
+            <p>{t('customers.noCustomers')}</p>
           </div>
         ) : (
           filtered.map(customer => {
@@ -184,7 +187,7 @@ export default function Customers() {
                     </div>
                     <div>
                       <p className="font-semibold text-slate-800">{customer.firstName} {customer.lastName}</p>
-                      <p className="text-xs text-slate-400">Customer since {format(parseISO(customer.createdAt), 'MMM yyyy')}</p>
+                      <p className="text-xs text-slate-400">{t('customers.customerSince')} {format(parseISO(customer.createdAt), 'MMM yyyy')}</p>
                     </div>
                   </div>
                   <div className="flex gap-1">
@@ -221,22 +224,22 @@ export default function Customers() {
                 {activeBooking && (
                   <div className="mt-3 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
                     <p className="text-xs text-green-700 font-medium">
-                      Currently renting: {getCarLabel(activeBooking.carId)}
+                      {t('customers.currentlyRenting')}: {getCarLabel(activeBooking.carId)}
                     </p>
                     <p className="text-xs text-green-600">
-                      Until {format(parseISO(activeBooking.endDate), 'MMM d, yyyy')}
+                      {t('customers.until')} {format(parseISO(activeBooking.endDate), 'MMM d, yyyy')}
                     </p>
                   </div>
                 )}
 
                 <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs text-slate-400">{customerBookings.length} booking{customerBookings.length !== 1 ? 's' : ''}</span>
+                  <span className="text-xs text-slate-400">{t('customers.bookings_other', { count: customerBookings.length })}</span>
                   {customerBookings.length > 0 && (
                     <button
                       onClick={() => setSelectedCustomer(customer)}
                       className="text-xs text-blue-600 hover:underline"
                     >
-                      View history
+                      {t('customers.viewHistory')}
                     </button>
                   )}
                 </div>
@@ -248,7 +251,7 @@ export default function Customers() {
 
       {modal && (
         <Modal
-          title={modal.mode === 'add' ? 'Add Customer' : 'Edit Customer'}
+          title={modal.mode === 'add' ? t('customers.addTitle') : t('customers.editTitle')}
           onClose={() => setModal(null)}
           size="md"
         >
@@ -269,7 +272,7 @@ export default function Customers() {
 
       {selectedCustomer && (
         <Modal
-          title={`Booking History – ${selectedCustomer.firstName} ${selectedCustomer.lastName}`}
+          title={`${t('customers.bookingHistory')} – ${selectedCustomer.firstName} ${selectedCustomer.lastName}`}
           onClose={() => setSelectedCustomer(null)}
           size="lg"
         >
@@ -295,11 +298,11 @@ export default function Customers() {
       )}
 
       {confirmDelete && (
-        <Modal title="Delete Customer" onClose={() => setConfirmDelete(null)} size="sm">
-          <p className="text-sm text-slate-600 mb-4">Delete this customer? Their booking history will also be affected.</p>
+        <Modal title={t('customers.deleteTitle')} onClose={() => setConfirmDelete(null)} size="sm">
+          <p className="text-sm text-slate-600 mb-4">{t('customers.deleteConfirm')}</p>
           <div className="flex justify-end gap-3">
-            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">Cancel</button>
-            <button onClick={() => { deleteCustomer(confirmDelete); setConfirmDelete(null); }} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">Delete</button>
+            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">{t('common.cancel')}</button>
+            <button onClick={() => { deleteCustomer(confirmDelete); setConfirmDelete(null); }} className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700">{t('common.delete')}</button>
           </div>
         </Modal>
       )}

@@ -8,6 +8,7 @@ import {
   Car as CarIcon, AlertTriangle, CheckCircle,
 } from 'lucide-react';
 import { format, parseISO, differenceInDays } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 const SERVICE_TYPES: ServiceType[] = [
   'oil-change', 'tire-rotation', 'brake-service', 'full-inspection',
@@ -40,6 +41,7 @@ interface ServiceFormProps {
 
 function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
   const { cars } = useAppContext();
+  const { t } = useTranslation();
   const [form, setForm] = useState(initial);
 
   const setField = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
@@ -61,14 +63,14 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="col-span-2">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Vehicle *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.vehicle')} *</label>
           <select
             required
             value={form.carId}
             onChange={e => setField('carId', e.target.value)}
             className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select vehicle...</option>
+            <option value="">{t('maintenance.form.selectVehicle')}</option>
             {cars.map(c => (
               <option key={c.id} value={c.id}>
                 {c.year} {c.make} {c.model} – {c.plate}
@@ -78,7 +80,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Service Type *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.serviceType')} *</label>
           <select
             required
             value={form.serviceType}
@@ -92,7 +94,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Date *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.date')} *</label>
           <input
             required
             type="date"
@@ -103,7 +105,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Odometer at Service (km) *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.odometer')} *</label>
           <input
             required
             type="number"
@@ -115,7 +117,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Cost (€) *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.cost')} *</label>
           <input
             required
             type="number"
@@ -128,7 +130,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Next Service at (km)</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.nextServiceOdometer')}</label>
           <input
             type="number"
             min={0}
@@ -140,7 +142,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Next Service Date</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.nextServiceDate')}</label>
           <input
             type="date"
             value={form.nextServiceDate ?? ''}
@@ -150,7 +152,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Service Provider *</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.provider')} *</label>
           <input
             required
             type="text"
@@ -162,7 +164,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Technician</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.technician')}</label>
           <input
             type="text"
             value={form.technician ?? ''}
@@ -174,7 +176,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Parts Replaced</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.partsReplaced')}</label>
         <input
           type="text"
           value={form.partsReplaced ?? ''}
@@ -185,7 +187,7 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">{t('maintenance.form.notes')}</label>
         <textarea
           rows={2}
           value={form.notes ?? ''}
@@ -197,10 +199,10 @@ function ServiceForm({ initial, onSave, onCancel }: ServiceFormProps) {
 
       <div className="flex justify-end gap-3 pt-2">
         <button type="button" onClick={onCancel} className="px-4 py-2 text-sm text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50">
-          Cancel
+          {t('common.cancel')}
         </button>
         <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-          Save Record
+          {t('maintenance.saveRecord')}
         </button>
       </div>
     </form>
@@ -219,7 +221,7 @@ function nextServiceWarning(record: ServiceRecord): 'overdue' | 'soon' | null {
 
 export default function Maintenance() {
   const { cars, serviceRecords, addServiceRecord, updateServiceRecord, deleteServiceRecord } = useAppContext();
-
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [carFilter, setCarFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState<ServiceType | 'all'>('all');
@@ -259,15 +261,15 @@ export default function Maintenance() {
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Maintenance</h1>
-          <p className="text-slate-500 text-sm mt-1">{serviceRecords.length} service records</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t('maintenance.title')}</h1>
+          <p className="text-slate-500 text-sm mt-1">{t('maintenance.subtitle_other', { count: serviceRecords.length })}</p>
         </div>
         <button
           onClick={() => setModal({ mode: 'add' })}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Log Service
+          {t('maintenance.logService')}
         </button>
       </div>
 
@@ -277,7 +279,7 @@ export default function Maintenance() {
           <div className="flex items-center gap-3">
             <div className="bg-blue-100 p-2 rounded-lg"><Wrench className="w-4 h-4 text-blue-600" /></div>
             <div>
-              <p className="text-xs text-slate-500">Total Records</p>
+              <p className="text-xs text-slate-500">{t('maintenance.totalRecords')}</p>
               <p className="text-xl font-bold text-slate-800">{serviceRecords.length}</p>
             </div>
           </div>
@@ -286,7 +288,7 @@ export default function Maintenance() {
           <div className="flex items-center gap-3">
             <div className="bg-green-100 p-2 rounded-lg"><CheckCircle className="w-4 h-4 text-green-600" /></div>
             <div>
-              <p className="text-xs text-slate-500">Total Spent</p>
+              <p className="text-xs text-slate-500">{t('maintenance.totalSpent')}</p>
               <p className="text-xl font-bold text-slate-800">€{totalCost.toLocaleString()}</p>
             </div>
           </div>
@@ -297,7 +299,7 @@ export default function Maintenance() {
               <AlertTriangle className={`w-4 h-4 ${overdueCount > 0 ? 'text-red-600' : 'text-slate-400'}`} />
             </div>
             <div>
-              <p className="text-xs text-slate-500">Overdue Services</p>
+              <p className="text-xs text-slate-500">{t('maintenance.overdueServices')}</p>
               <p className={`text-xl font-bold ${overdueCount > 0 ? 'text-red-700' : 'text-slate-800'}`}>{overdueCount}</p>
             </div>
           </div>
@@ -308,7 +310,7 @@ export default function Maintenance() {
               <CarIcon className={`w-4 h-4 ${soonCount > 0 ? 'text-amber-600' : 'text-slate-400'}`} />
             </div>
             <div>
-              <p className="text-xs text-slate-500">Due Within 30 Days</p>
+              <p className="text-xs text-slate-500">{t('maintenance.dueWithin30')}</p>
               <p className={`text-xl font-bold ${soonCount > 0 ? 'text-amber-700' : 'text-slate-800'}`}>{soonCount}</p>
             </div>
           </div>
@@ -323,7 +325,7 @@ export default function Maintenance() {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search vehicle, provider, service type..."
+            placeholder={t('maintenance.searchPlaceholder')}
             className="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
         </div>
@@ -332,7 +334,7 @@ export default function Maintenance() {
           onChange={e => setCarFilter(e.target.value)}
           className="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-700"
         >
-          <option value="all">All vehicles</option>
+          <option value="all">{t('maintenance.allVehicles')}</option>
           {cars.map(c => (
             <option key={c.id} value={c.id}>{c.make} {c.model} ({c.plate})</option>
           ))}
@@ -342,7 +344,7 @@ export default function Maintenance() {
           onChange={e => setTypeFilter(e.target.value as ServiceType | 'all')}
           className="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-700"
         >
-          <option value="all">All service types</option>
+          <option value="all">{t('maintenance.allServiceTypes')}</option>
           {SERVICE_TYPES.map(t => (
             <option key={t} value={t}>{SERVICE_TYPE_LABELS[t]}</option>
           ))}
@@ -355,14 +357,14 @@ export default function Maintenance() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-xs text-slate-500 bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-5 py-3 font-medium">Vehicle</th>
-                <th className="text-left px-5 py-3 font-medium">Service</th>
-                <th className="text-left px-5 py-3 font-medium">Date</th>
-                <th className="text-right px-5 py-3 font-medium">Odometer</th>
-                <th className="text-left px-5 py-3 font-medium">Next Service</th>
-                <th className="text-left px-5 py-3 font-medium">Provider</th>
-                <th className="text-left px-5 py-3 font-medium">Parts Replaced</th>
-                <th className="text-right px-5 py-3 font-medium">Cost</th>
+                <th className="text-left px-5 py-3 font-medium">{t('maintenance.vehicle')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('maintenance.service')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('maintenance.date')}</th>
+                <th className="text-right px-5 py-3 font-medium">{t('maintenance.odometer')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('maintenance.nextService')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('maintenance.provider')}</th>
+                <th className="text-left px-5 py-3 font-medium">{t('maintenance.partsReplaced')}</th>
+                <th className="text-right px-5 py-3 font-medium">{t('maintenance.cost')}</th>
                 <th className="px-5 py-3"></th>
               </tr>
             </thead>
@@ -370,7 +372,7 @@ export default function Maintenance() {
               {filtered.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="text-center py-12 text-slate-400">
-                    No service records found
+                    {t('maintenance.noRecords')}
                   </td>
                 </tr>
               ) : (
@@ -445,7 +447,7 @@ export default function Maintenance() {
               <tfoot>
                 <tr className="bg-slate-50 border-t border-slate-200">
                   <td colSpan={7} className="px-5 py-3 text-sm text-slate-500 font-medium">
-                    {filtered.length} record{filtered.length !== 1 ? 's' : ''}
+                    {t('maintenance.records_other', { count: filtered.length })}
                   </td>
                   <td className="px-5 py-3 text-right font-bold text-slate-800">
                     €{totalCost.toLocaleString()}
@@ -460,7 +462,7 @@ export default function Maintenance() {
 
       {modal && (
         <Modal
-          title={modal.mode === 'add' ? 'Log Service' : 'Edit Service Record'}
+          title={modal.mode === 'add' ? t('maintenance.addTitle') : t('maintenance.editTitle')}
           onClose={() => setModal(null)}
           size="lg"
         >
@@ -485,15 +487,15 @@ export default function Maintenance() {
       )}
 
       {confirmDelete && (
-        <Modal title="Delete Service Record" onClose={() => setConfirmDelete(null)} size="sm">
-          <p className="text-sm text-slate-600 mb-4">Delete this service record permanently?</p>
+        <Modal title={t('maintenance.deleteTitle')} onClose={() => setConfirmDelete(null)} size="sm">
+          <p className="text-sm text-slate-600 mb-4">{t('maintenance.deleteConfirm')}</p>
           <div className="flex justify-end gap-3">
-            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">Cancel</button>
+            <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50">{t('common.cancel')}</button>
             <button
               onClick={() => { deleteServiceRecord(confirmDelete); setConfirmDelete(null); }}
               className="px-4 py-2 text-sm text-white bg-red-600 rounded-lg hover:bg-red-700"
             >
-              Delete
+              {t('common.delete')}
             </button>
           </div>
         </Modal>
