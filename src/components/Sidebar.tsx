@@ -12,7 +12,11 @@ const navRoutes = [
   { to: '/financials', key: 'financials', icon: BarChart2 },
 ] as const;
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+export default function Sidebar({ onClose }: SidebarProps) {
   const location = useLocation();
   const { t, i18n } = useTranslation();
 
@@ -39,6 +43,7 @@ export default function Sidebar() {
             <NavLink
               key={to}
               to={to}
+              onClick={onClose}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
                   ? 'bg-blue-600 text-white'
